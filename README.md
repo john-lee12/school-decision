@@ -34,29 +34,18 @@ npx serve docs
 
 ## 部署
 
-兩個目標，同一份 `docs/`：
+程式碼在 GitHub，由 **Cloudflare Pages 的 Git 連結**自動部署。push 到 `main`，
+Cloudflare 會自己拉取並發布——不需要 API token，也不需要 GitHub Actions。
 
-| 目標 | 方式 | 觸發 |
-| --- | --- | --- |
-| GitHub Pages | `main` 分支的 `/docs` 資料夾 | push 到 `main` |
-| Cloudflare Pages | `.github/workflows/deploy-cloudflare.yml`（wrangler-action） | push 到 `main` |
+| 設定項 | 值 |
+| --- | --- |
+| Production branch | `main` |
+| Framework preset | None |
+| Build command | （留空） |
+| Build output directory | `docs` |
 
-### Cloudflare Pages 首次設定
-
-1. 建立 Pages 專案（只需做一次）：
-
-   ```bash
-   npx wrangler pages project create school-decision --production-branch=main
-   ```
-
-2. 在 Cloudflare 後台建立 API token，權限選 **Account → Cloudflare Pages → Edit**。
-
-3. 在 GitHub repo 的 Settings → Secrets and variables → Actions 新增兩個 secret：
-
-   - `CLOUDFLARE_API_TOKEN`
-   - `CLOUDFLARE_ACCOUNT_ID`
-
-之後每次 push 到 `main` 就會自動部署。
+GitHub Pages 亦由 `main` 分支的 `/docs` 提供，作為備援。
+不需要的話可到 repo 的 Settings → Pages 關閉。
 
 ## 授權
 
