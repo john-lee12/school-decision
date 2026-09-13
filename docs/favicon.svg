@@ -1,10 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" rx="6" fill="#2F4A96"/>
-  <g fill="none" stroke="#F1F2F6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M16 27V17"/>
-    <path d="M16 17 8 9"/>
-    <path d="M16 17l8-8"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="一條路向上分成兩條">
+  <rect width="32" height="32" rx="7" fill="#2F4A96"/>
+  <g fill="none" stroke="#F1F2F6" stroke-width="3.2" stroke-linecap="round">
+    <path d="M16 27 V18"/>
+    <path d="M16 18 L6.8 11.2"/>
+    <path d="M16 18 L25.2 11.2"/>
   </g>
-  <circle cx="8" cy="7.5" r="2.6" fill="#F1F2F6"/>
-  <circle cx="24" cy="7.5" r="2.6" fill="#F1F2F6"/>
 </svg>
