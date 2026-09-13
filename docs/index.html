@@ -1,0 +1,878 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>國中升學決策表</title>
+<meta name="description" content="公立、私中、國際學校、實驗教育、自學——一張給父母一起勾選的工作表：拆解「私中比較好」、比較五條路徑的退出成本，並排出行動時程。">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="國中升學決策表">
+<meta property="og:description" content="把「聽說比較好」拆成可以查證的成分，把不可逆的決定盡量往後推。">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700&display=swap">
+<style>
+:root{
+  --paper:#F1F2F6; --surface:#FFFFFF; --surface-2:#E9EBF1;
+  --ink:#191C28; --ink-2:#454B60; --muted:#6E7489;
+  --rule:#D3D7E2; --rule-soft:#E4E6EE;
+  --accent:#2F4A96; --accent-soft:#E4E9F6;
+  --warn:#A4402B; --warn-soft:#F7E7E2;
+  --ok:#356149; --ok-soft:#E1EDE6;
+  --shadow:0 1px 2px rgba(25,28,40,.05), 0 10px 26px -20px rgba(25,28,40,.45);
+  --seg-empty:#DDE0E9;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#12141C; --surface:#1A1D27; --surface-2:#232735;
+    --ink:#E7E9F1; --ink-2:#B6BBCC; --muted:#8A90A5;
+    --rule:#333849; --rule-soft:#272B3A;
+    --accent:#93A9EC; --accent-soft:#232B44;
+    --warn:#E29078; --warn-soft:#3A2620;
+    --ok:#7FBB99; --ok-soft:#1F3229;
+    --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -20px rgba(0,0,0,.9);
+    --seg-empty:#2C3142;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#12141C; --surface:#1A1D27; --surface-2:#232735;
+  --ink:#E7E9F1; --ink-2:#B6BBCC; --muted:#8A90A5;
+  --rule:#333849; --rule-soft:#272B3A;
+  --accent:#93A9EC; --accent-soft:#232B44;
+  --warn:#E29078; --warn-soft:#3A2620;
+  --ok:#7FBB99; --ok-soft:#1F3229;
+  --shadow:0 1px 2px rgba(0,0,0,.5), 0 10px 26px -20px rgba(0,0,0,.9);
+  --seg-empty:#2C3142;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  font-size:15.5px; line-height:1.75;
+  font-feature-settings:"palt" 1;
+}
+img{max-width:100%}
+[hidden]{display:none!important}
+.wrap{max-width:900px; margin:0 auto; padding:0 24px 96px}
+
+/* ---------- masthead ---------- */
+.masthead{padding:56px 0 28px; border-bottom:2px solid var(--ink)}
+.kicker{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11.5px;
+  letter-spacing:.16em; color:var(--accent); margin:0 0 14px;
+}
+h1{
+  font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
+  font-size:clamp(32px,5.4vw,46px); line-height:1.24; letter-spacing:.01em;
+  margin:0 0 16px; text-wrap:balance;
+}
+.standfirst{max-width:62ch; color:var(--ink-2); font-size:16.5px; margin:0}
+.standfirst b{color:var(--ink); font-weight:500}
+
+/* ---------- status strip ---------- */
+.strip{
+  display:flex; flex-wrap:wrap; align-items:center; gap:8px 22px;
+  padding:14px 0; border-bottom:1px solid var(--rule);
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px;
+  color:var(--muted); font-variant-numeric:tabular-nums;
+}
+.strip b{color:var(--ink); font-weight:500}
+.strip .spacer{flex:1 1 auto}
+.tool{
+  font:inherit; font-size:11px; cursor:pointer; padding:3px 10px;
+  border:1px solid var(--rule); border-radius:999px;
+  background:var(--surface); color:var(--muted);
+  transition:color .13s,border-color .13s;
+}
+.tool:hover{color:var(--accent); border-color:var(--accent)}
+.chip{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:2px 9px; border:1px solid var(--rule); border-radius:999px;
+  font-size:11px; color:var(--muted); background:var(--surface);
+}
+.chip .dot{width:6px;height:6px;border-radius:50%;background:var(--muted)}
+.chip.live{color:var(--ok); border-color:color-mix(in srgb,var(--ok) 40%,transparent)}
+.chip.live .dot{background:var(--ok)}
+.chip.ro{color:var(--warn); border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.chip.ro .dot{background:var(--warn)}
+
+/* ---------- sections ---------- */
+section{
+  display:grid; grid-template-columns:64px minmax(0,1fr);
+  padding-top:52px; margin-top:44px; border-top:1px solid var(--rule-soft);
+}
+section:first-of-type{border-top:0}
+.snum{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px;
+  color:var(--accent); padding-top:9px; letter-spacing:.06em;
+}
+.sbody{min-width:0}
+h2{
+  font-family:"Noto Serif TC",Georgia,serif; font-weight:700;
+  font-size:25px; line-height:1.4; margin:0 0 10px; text-wrap:balance;
+}
+.lede{color:var(--ink-2); max-width:62ch; margin:0 0 26px}
+h3{font-size:16px; font-weight:700; margin:34px 0 12px; line-height:1.5}
+p{margin:0 0 14px}
+
+/* ---------- verdict list ---------- */
+.verdicts{display:flex; flex-direction:column; gap:0; margin:0; padding:0; list-style:none}
+.verdicts li{
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px 18px;
+  align-items:start; padding:15px 0; border-bottom:1px solid var(--rule-soft);
+}
+.verdicts li:first-child{border-top:1px solid var(--rule-soft)}
+.v-name{font-weight:700}
+.v-desc{grid-column:1; color:var(--ink-2); font-size:14.5px; margin:0}
+.v-tag{
+  grid-row:1/3; align-self:center;
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px;
+  padding:3px 9px; border-radius:3px; white-space:nowrap;
+  background:var(--surface-2); color:var(--muted);
+}
+.v-tag.no{background:var(--warn-soft); color:var(--warn)}
+.v-tag.yes{background:var(--ok-soft); color:var(--ok)}
+
+.pullquote{
+  margin:30px 0 0; padding:18px 22px; background:var(--accent-soft);
+  border-left:3px solid var(--accent); border-radius:0 4px 4px 0;
+  font-size:15.5px; color:var(--ink);
+}
+.pullquote p:last-child{margin-bottom:0}
+
+/* ---------- observation ---------- */
+.obs{display:flex; flex-direction:column; gap:14px}
+.ob{
+  background:var(--surface); border:1px solid var(--rule-soft); border-radius:4px;
+  padding:18px 20px 16px;
+}
+.ob-q{display:flex; align-items:baseline; gap:10px; margin-bottom:14px}
+.ob-id{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px;
+  color:var(--muted); flex:none;
+}
+.ob-title{font-weight:700; font-size:16px}
+.ob-pair{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.ob-opt{
+  text-align:left; font:inherit; cursor:pointer;
+  background:var(--paper); color:var(--ink-2);
+  border:1px solid var(--rule); border-radius:4px;
+  padding:11px 13px; line-height:1.5; transition:background .13s, border-color .13s, color .13s;
+}
+.ob-opt:hover{border-color:var(--accent)}
+.ob-opt strong{display:block; font-size:14.5px; font-weight:700; color:var(--ink); margin-bottom:2px}
+.ob-opt span{font-size:13px; display:block}
+.ob-opt[aria-pressed="true"]{
+  background:var(--accent-soft); border-color:var(--accent); color:var(--ink-2);
+  box-shadow:inset 0 0 0 1px var(--accent);
+}
+.ob-read{
+  margin-top:13px; padding-top:12px; border-top:1px dashed var(--rule);
+  font-size:13.5px; color:var(--muted);
+}
+.ob-read b{color:var(--ink-2); font-weight:500}
+
+/* ---------- path cards ---------- */
+.paths{display:flex; flex-direction:column; gap:20px}
+.path{
+  background:var(--surface); border:1px solid var(--rule-soft);
+  border-left:4px solid var(--stripe); border-radius:0 4px 4px 0;
+  box-shadow:var(--shadow); overflow:hidden;
+}
+.path.is-out{opacity:.5}
+.path-head{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 12px;
+  padding:18px 22px 14px;
+}
+.path-name{font-family:"Noto Serif TC",Georgia,serif; font-size:21px; font-weight:700; line-height:1.3}
+.path-tag{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px;
+  color:var(--muted); padding:2px 8px; background:var(--surface-2); border-radius:3px;
+}
+.path-fields{
+  display:grid; grid-template-columns:5.5rem minmax(0,1fr);
+  gap:1px 16px; padding:0 22px 4px; align-items:start;
+}
+.f-label{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px;
+  color:var(--muted); letter-spacing:.05em; padding-top:5px;
+}
+.f-val{padding:3px 0 9px; font-size:14.5px; color:var(--ink-2); min-width:0}
+.f-val ul{margin:0; padding-left:1.15em}
+.f-val li{margin-bottom:3px}
+.f-val li::marker{color:var(--muted)}
+.f-val.warn{color:var(--warn); font-weight:500}
+.meter{display:inline-flex; gap:3px; vertical-align:-2px; margin-right:9px}
+.meter i{width:15px; height:8px; border-radius:1px; background:var(--seg-empty); display:block}
+.meter i.on{background:var(--lvlcolor)}
+.f-val .exitnote{display:block; font-size:13.5px; color:var(--ink-2); font-weight:400; margin-top:4px}
+
+.path-foot{
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px;
+  padding:14px 22px 16px; margin-top:8px;
+  border-top:1px solid var(--rule-soft); background:var(--paper);
+}
+.seg{display:inline-flex; border:1px solid var(--rule); border-radius:4px; overflow:hidden; flex:none}
+.seg button{
+  font:inherit; font-size:13px; cursor:pointer; padding:6px 15px;
+  background:var(--surface); color:var(--ink-2); border:0; border-right:1px solid var(--rule);
+  transition:background .13s,color .13s;
+}
+.seg button:last-child{border-right:0}
+.seg button:hover{background:var(--surface-2)}
+.seg button[aria-pressed="true"][data-v="in"]{background:var(--ok); color:#fff}
+.seg button[aria-pressed="true"][data-v="out"]{background:var(--warn); color:#fff}
+.note{
+  flex:1 1 220px; min-width:0; font:inherit; font-size:13.5px;
+  background:var(--surface); color:var(--ink);
+  border:1px solid var(--rule); border-radius:4px; padding:6px 11px;
+}
+.note::placeholder{color:var(--muted)}
+
+/* ---------- ladder ---------- */
+.ladder{border-top:1px solid var(--rule); margin-top:4px}
+.rung{
+  display:grid; grid-template-columns:9.5rem 90px minmax(0,1fr);
+  gap:4px 16px; align-items:center; padding:13px 0;
+  border-bottom:1px solid var(--rule-soft);
+}
+.rung-name{font-weight:700; font-size:14.5px}
+.rung-say{color:var(--ink-2); font-size:14px; min-width:0}
+
+/* ---------- other routes ---------- */
+.routes{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft)}
+.route{background:var(--surface); padding:16px 18px}
+.route h4{margin:0 0 5px; font-size:15px; font-weight:700}
+.route .when{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:11px;
+  color:var(--accent); display:block; margin-bottom:7px;
+}
+.route p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.65}
+
+/* ---------- alignment ---------- */
+.fieldset{display:grid; grid-template-columns:1fr 1fr; gap:16px}
+.field label{
+  display:block; font-family:"IBM Plex Mono",ui-monospace,monospace;
+  font-size:11px; letter-spacing:.06em; color:var(--muted); margin-bottom:6px;
+}
+.field textarea{
+  width:100%; font:inherit; font-size:14.5px; line-height:1.7;
+  background:var(--surface); color:var(--ink);
+  border:1px solid var(--rule); border-radius:4px; padding:11px 13px;
+  resize:vertical; min-height:110px;
+}
+.field textarea::placeholder{color:var(--muted)}
+.keyfield{margin-top:22px; padding:20px 22px; background:var(--warn-soft); border-radius:4px}
+.keyfield .field label{color:var(--warn)}
+.keyfield h3{margin:0 0 4px}
+.keyfield .why{margin:0 0 14px; font-size:14px; color:var(--ink-2)}
+.keyfield textarea{min-height:84px; border-color:color-mix(in srgb,var(--warn) 35%,transparent)}
+
+/* ---------- timeline ---------- */
+.tl{border-top:1px solid var(--rule)}
+.tl-phase{
+  display:grid; grid-template-columns:8.5rem minmax(0,1fr); gap:6px 18px;
+  padding:20px 0; border-bottom:1px solid var(--rule-soft);
+}
+.tl-when{
+  font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px;
+  color:var(--accent); font-variant-numeric:tabular-nums; padding-top:2px;
+}
+.tl-when span{display:block; color:var(--muted); font-size:11px; margin-top:2px}
+.tl-items{display:flex; flex-direction:column; gap:9px; min-width:0}
+.task{display:flex; gap:11px; align-items:flex-start; cursor:pointer}
+.task .box{
+  flex:none; width:17px; height:17px; margin-top:4px; border-radius:3px;
+  border:1.5px solid var(--rule); background:var(--surface);
+  display:grid; place-items:center; transition:background .13s,border-color .13s;
+}
+.task .box svg{width:11px; height:11px; opacity:0; transition:opacity .13s}
+.task[aria-pressed="true"] .box{background:var(--accent); border-color:var(--accent)}
+.task[aria-pressed="true"] .box svg{opacity:1}
+.task[aria-pressed="true"] .txt{color:var(--muted); text-decoration:line-through; text-decoration-color:var(--rule)}
+.task .txt{font-size:14.5px; line-height:1.6; color:var(--ink-2)}
+.task .txt b{color:var(--ink); font-weight:500}
+.task:hover .box{border-color:var(--accent)}
+
+/* ---------- closing ---------- */
+.closing{
+  margin-top:52px; padding:28px 30px; border:2px solid var(--ink); border-radius:4px;
+}
+.closing h2{font-size:21px; margin-bottom:12px}
+.closing p:last-child{margin-bottom:0}
+.closing .default{
+  font-family:"Noto Serif TC",Georgia,serif; font-size:17.5px; line-height:1.7;
+  color:var(--ink); margin-bottom:14px;
+}
+.foot{margin-top:34px; font-size:12.5px; color:var(--muted); line-height:1.7}
+.foot a{color:var(--muted)}
+
+/* ---------- toast ---------- */
+.toast{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%);
+  background:var(--ink); color:var(--paper); font-size:13px;
+  padding:9px 18px; border-radius:999px; box-shadow:var(--shadow); z-index:20;
+}
+
+button:focus-visible,textarea:focus-visible,input:focus-visible,.task:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px; border-radius:3px;
+}
+textarea:focus,.note:focus{border-color:var(--accent)}
+
+@media (max-width:720px){
+  .wrap{padding:0 18px 72px}
+  section{grid-template-columns:1fr; padding-top:38px; margin-top:32px}
+  .snum{padding-top:0; margin-bottom:8px}
+  .ob-pair{grid-template-columns:1fr}
+  .path-fields{grid-template-columns:1fr; gap:0}
+  .f-label{padding-top:10px}
+  .f-val{padding-bottom:6px}
+  .rung{grid-template-columns:1fr; gap:6px}
+  .fieldset{grid-template-columns:1fr}
+  .tl-phase{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+@media print{
+  body{background:#fff; font-size:11pt}
+  .strip .tool,.toast{display:none}
+  .path,.ob,.tl-phase{break-inside:avoid}
+  .closing{border-color:#000}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+(function(){
+"use strict";
+
+var STORE_KEY = "jhs-decision-v1";
+
+/* ============ state ============ */
+var state = {observations:{}, paths:{}, vision:{a:"",b:""}, exitRule:"", tasks:{}, updatedAt:null};
+var loadedFrom = "new";
+
+function normalize(s){
+  s = s && typeof s === "object" ? s : {};
+  return {
+    observations: s.observations && typeof s.observations === "object" ? s.observations : {},
+    paths:        s.paths && typeof s.paths === "object" ? s.paths : {},
+    vision:       {a: (s.vision && s.vision.a) || "", b: (s.vision && s.vision.b) || ""},
+    exitRule:     s.exitRule || "",
+    tasks:        s.tasks && typeof s.tasks === "object" ? s.tasks : {},
+    updatedAt:    s.updatedAt || null
+  };
+}
+
+/* base64url <-> UTF-8, for sharing state in the URL */
+function b64enc(str){
+  var bytes = new TextEncoder().encode(str), bin = "";
+  for(var i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+}
+function b64dec(s){
+  s = s.replace(/-/g,"+").replace(/_/g,"/");
+  while(s.length % 4) s += "=";
+  var bin = atob(s), bytes = new Uint8Array(bin.length);
+  for(var i=0;i<bin.length;i++) bytes[i] = bin.charCodeAt(i);
+  return new TextDecoder().decode(bytes);
+}
+
+function loadState(){
+  var m = /[#&]s=([A-Za-z0-9_-]+)/.exec(location.hash);
+  if(m){
+    try{
+      state = normalize(JSON.parse(b64dec(m[1])));
+      loadedFrom = "link";
+      try{ localStorage.setItem(STORE_KEY, JSON.stringify(state)); }catch(e){}
+      history.replaceState(null, "", location.pathname + location.search);
+      return;
+    }catch(e){ /* 連結壞了就當作沒有，往下讀本機紀錄 */ }
+  }
+  try{
+    var raw = localStorage.getItem(STORE_KEY);
+    if(raw){ state = normalize(JSON.parse(raw)); loadedFrom = "local"; }
+  }catch(e){ loadedFrom = "nostore"; }
+}
+
+var saveTimer = null;
+function save(){
+  state.updatedAt = new Date().toISOString();
+  updateStrip();
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    try{
+      localStorage.setItem(STORE_KEY, JSON.stringify(state));
+      chip("live", "已存到這台裝置");
+    }catch(e){
+      chip("ro", "此瀏覽器無法儲存");
+    }
+  }, 400);
+}
+
+/* ============ content ============ */
+var VERDICTS = [
+  {name:"篩選效應", tag:"不是教學", cls:"no",
+   desc:"入學先篩過一輪，同儕的學習動機與家庭資源同質性高。這是「同學好」，不是「老師教得好」。"},
+  {name:"時間堆疊", tag:"真實，但有代價", cls:"",
+   desc:"早自習、第八節、晚自習、週六輔導，每天多 2–3 小時。成效是真的，代價是睡眠、運動與自主時間。"},
+  {name:"進度與考試密度", tag:"雙面刃", cls:"",
+   desc:"國中教高中內容、月考加小考。對吸收快的孩子是加速器，對需要慢火的孩子是夾生飯。"},
+  {name:"行政與師資一致性", tag:"真實優勢", cls:"yes",
+   desc:"公立國中依法必須常態編班、教師屬公務體系不易汰換；私中對教師與班級經營的掌控度高。這是私中唯一真正屬於「教學品質」的優勢。"}
+];
+
+var DIMS = [
+  {id:"d1", t:"自律引擎在內還是在外",
+   a:{h:"外部驅動", s:"要人盯、有結構才動得起來"},
+   b:{h:"內部驅動", s:"自己會讀，有自己的步調"},
+   read:"外部驅動 → 私中或嚴管型環境的結構真的有用。內部驅動 → 高密度課表反而會壓抑他，把他本來就有的引擎關掉。"},
+  {id:"d2", t:"排名壓力下，他會被激發還是熄火",
+   a:{h:"被激發", s:"輸了會想扳回來"},
+   b:{h:"會熄火", s:"落後久了就放棄，或開始逃避"},
+   read:"小學前三名進私中可能變中後段。這個衝擊對自我概念的影響，比多學兩章數學重要得多。會熄火的孩子需要一個他能站在前段的環境。"},
+  {id:"d3", t:"學習吸收的型態",
+   a:{h:"快而廣", s:"喜歡難題，講一次就懂"},
+   b:{h:"慢而深", s:"靠理解不靠反覆，需要時間消化"},
+   read:"慢而深的孩子遇到超前進度會全面崩塌 —— 不是不夠聰明，是沒有時間把地基蓋起來。這類孩子在公立的正常進度下反而能走得更遠。"},
+  {id:"d4", t:"社交彈性",
+   a:{h:"需要穩定小團體", s:"換環境要很久才安頓下來"},
+   b:{h:"換環境也能重建", s:"適應快，交朋友不費力"},
+   read:"轉換學校（尤其實驗教育與國際學校這類小規模環境）的社交重建成本，對前者是隱形的高稅。小校還有一個問題：人際出狀況時無處可躲。"},
+  {id:"d5", t:"身體條件與作息",
+   a:{h:"睡眠需求大", s:"睡不夠隔天整個人是垮的"},
+   b:{h:"精力充沛", s:"撐得住長時間、早出晚歸"},
+   read:"通勤 60 分鐘 vs 15 分鐘，是每天 1.5 小時的差距。國中生睡眠低於 7 小時會直接吃掉學習效率 —— 這是最容易被「學校比較好」蓋過去、但最該算的一筆帳。"}
+];
+
+var PATHS = [
+  {
+    key:"public", name:"公立國中", tag:"學區分發", lvl:1,
+    cost:"近乎免費（雜費約 5,000–10,000 元／年）",
+    when:"不需報名，入學當年 6 月分發。若要遷戶籍改變學區，多數縣市要求設籍滿 1–2 年，要提早兩年動作。",
+    exit:"本來就是體制內的預設值，任何時候都能往別處走。",
+    fit:["自律尚可，或家長有餘裕陪讀","重視睡眠、運動與課外時間","想把錢留給高中、大學或長期才藝","還沒想清楚，需要保留最大彈性"],
+    misfit:["自律弱，且家中沒有人能穩定盯","查證過學區學校確實有具體問題（非傳聞）"],
+    ask:["分發到哪一所？放學時段去校門口看學生狀態，比任何說明會真實","有沒有數理／語文資優班、雙語實驗班、藝術才能班","資優鑑定的時程與準備方式（數理建議提早一年）"]
+  },
+  {
+    key:"private", name:"私立中學", tag:"甄選或登記抽籤", lvl:2,
+    cost:"約 10–20 萬／年（住宿、課輔、餐費另計）",
+    when:"小六上（多在 11 月起）陸續報名，小六下（1–3 月）甄選或抽籤。各校時程與方式差異大，要提早一年打聽。",
+    exit:"隨時可轉回學區學校，行政上很簡單。真正的成本是孩子的挫敗感，以及家長被沉沒成本綁架。",
+    fit:["需要外部結構才能維持紀律","抗壓性好，排名不會擊倒他","程度中上，跟得上超前進度","家長無暇盯功課，希望同儕環境單純"],
+    misfit:["學習需要慢火、靠理解不靠反覆","容易焦慮，或對排名特別敏感","通勤超過 45 分鐘"],
+    ask:["這是「直升型完全中學」還是「拚會考型」？兩者的生活完全不同","直升率多少？直升門檻是什麼？","晚自習到幾點、一週幾次考試、體育課會不會被借走","每年轉出多少學生 —— 這是最誠實的指標"]
+  },
+  {
+    key:"intl", name:"國際學校", tag:"國際部／雙語部", lvl:5,
+    cost:"約 40–90 萬／年。要用「國中到大學畢業 10 年總支出」估算，通常是千萬級。",
+    when:"多數學校全年招生或分梯次，英文能力檢測＋面談。越早進入英語授課環境語言優勢越大。",
+    exit:"幾乎不可逆。國文與社會科會與同齡體制生拉開 2–3 年，回頭考學測形同放棄。走了就是單行道。",
+    fit:["家庭已經確定海外升學，不是「試試看」","財力能撐十年，且經得起最壞情況","孩子英語基礎已具備，或年紀夠小能快速適應","父母認同非考試導向的評量方式"],
+    misfit:["把它當成「逃離台灣教育」的出口","財務需要勉強才撐得住 —— 中途被迫轉出對孩子傷害最大"],
+    ask:["先確認資格：外僑學校需外國護照身分，本國籍原則上不能就讀","本國籍可讀的是私校國際部／雙語部或實驗教育機構形式 —— 學籍掛在哪裡？會影響後續報考資格","課程是 IB、AP 還是 A-Level？這決定未來申請哪些國家比較順","畢業生實際去了哪些學校（要看名單，不要看宣傳）"]
+  },
+  {
+    key:"exp", name:"實驗教育學校", tag:"學校型態", lvl:4,
+    cost:"公辦公營近乎免費；公辦民營低廉；私立實驗學校約 15–40 萬／年",
+    when:"名額少，多需抽籤或審查，時程各校不同。國中階段的選擇遠少於國小，且集中在特定縣市 —— 常常要搬家或長途通勤。",
+    exit:"偏高。數學、英文進度與考試文化都要重建，國三才想轉回來幾乎來不及。",
+    fit:["你認同這個教育理念本身（華德福、探究式、自主學習）","孩子適合非結構化的學習節奏","家長願意高度參與校務"],
+    misfit:["動機是「逃離體制」而不是「認同這個理念」","孩子需要明確結構與外部進度"],
+    ask:["上課日實地參訪至少兩次，不要只去招生說明會","找國三生的家長深談 —— 不是國一新生家長","畢業生後來去哪裡？升學銜接怎麼補？","師資流動率多少？（小校最常見的問題）"]
+  },
+  {
+    key:"home", name:"自學", tag:"非學校型態實驗教育", lvl:3,
+    cost:"個人自學學費為零，但機會成本高（家長時間、師資費、教材）；機構自學約 15–30 萬／年",
+    when:"向戶籍地教育局申請計畫書，審議會審查，通常每學年申請一次。多數縣市申請期在 4–5 月與 10–11 月，要提早一年確認時程。",
+    exit:"中等。法規上每學年可進出，學籍寄於學區學校；銜接落差視自學內容而定。",
+    fit:["孩子有強烈自主性與明確興趣","家長有時間與規劃能力，或有資源外包","需要客製化節奏（資優加速，或需要慢下來）"],
+    misfit:["雙薪且無人能陪 —— 這是自學最常見的失敗原因","把自學當成「不想上學」的替代方案"],
+    ask:["三型要選哪一種：個人自學、團體自學（3 人以上共學）、還是機構自學","自學不等於放養 —— 失敗案例多半敗在缺結構與社交孤立","三件事要先解決：每週固定的同儕時間、外部檢核點（檢定／競賽／作品發表）、一位非父母的引導者","出口是通的：可參加會考、可報考高中，大學端有特殊選才與實驗教育學生的申請管道 —— 但成果要主動經營"]
+  }
+];
+
+var LADDER = [
+  {n:"公立國中", lvl:1, say:"本來就是預設值，往哪走都行"},
+  {n:"私立中學", lvl:2, say:"行政上隨時可轉回學區學校；成本在心理，不在制度"},
+  {n:"自學", lvl:3, say:"每學年可進出，銜接落差看自學內容"},
+  {n:"實驗教育學校", lvl:4, say:"進度與考試文化要重建，國三才轉來不及"},
+  {n:"國際學校", lvl:5, say:"國文與社會落差 2–3 年補不回來，學測形同放棄"}
+];
+
+var ROUTES = [
+  {h:"資優班／雙語班／藝才班", w:"國一或國二鑑定", p:"數理資優、語文資優、雙語實驗班、音樂美術舞蹈（需術科）、體育班。在公立體系內取得接近私中的密度與同儕，幾乎免費。數理資優建議小五就開始準備。"},
+  {h:"科學班", w:"國三下考試", p:"附屬於建中、師大附中、竹科實中、中一中、南一中等校，國中直接修大學課程。需要國中階段的數理競賽基礎，準備期通常從國一開始。"},
+  {h:"完全中學直升", w:"國三免會考", p:"公立完全中學與部分私中提供直升高中部，省下國三一年的應試時間，但綁定該校高中。要問清楚直升門檻。"},
+  {h:"五專", w:"國三下，優先免試入學", p:"國中畢業直接入學五年制專科：北護、北商、台北科大附設專科部等。對確定不走普通高中、有明確技術興趣的孩子，是被嚴重低估的路徑。"},
+  {h:"技職路線", w:"國二可先試探", p:"高職、產學攜手合作計畫（邊學邊工作、學費減免）。國中階段可透過技藝教育專案提前試探性向，不必等到會考後才決定。"},
+  {h:"海外就學", w:"多從高中開始", p:"新加坡、馬來西亞的國際學校約為台灣國際學校的 6–7 成費用；另有日本高中、港澳等選項。比國內國際學校晚一步啟動，成本與不可逆程度都較低。"},
+  {h:"同等學力報考", w:"不必然要讀完高中", p:"自學生可用同等學力資格報考大學。這條路的存在意味著：即使離開體制，升學的門仍然開著 —— 但要主動累積可被檢視的成果。"}
+];
+
+var PHASES = [
+  {when:"小五上", sub:"入學前 2 年", items:[
+    {id:"t1", txt:"<b>父母各自寫下「希望孩子 25 歲時是什麼樣子」，再對照。</b>多數選校衝突其實是目標衝突，先解決這個，後面的討論才有共同基準。"},
+    {id:"t2", txt:"查出你家分發到哪一所公立國中，<b>在放學時段去校門口站十分鐘</b>，看學生的狀態。"},
+    {id:"t3", txt:"若考慮遷戶籍改學區，現在查該縣市的設籍年限規定 —— 這是最後的動作時機。"},
+    {id:"t4", txt:"財務試算：把國中 3 年 ＋ 高中 3 年的各路徑總成本算出來，含最壞情況。"}
+  ]},
+  {when:"小五寒假", sub:"", items:[
+    {id:"t5", txt:"參訪 2–3 所私中，<b>堅持挑上課日去</b>，不要只看招生說明會。"},
+    {id:"t6", txt:"若考慮實驗教育或自學，找兩個以上已經走過國中階段的家庭深談。"}
+  ]},
+  {when:"小五下", sub:"", items:[
+    {id:"t7", txt:"確認各候選私中的實際招生方式：看在校成績？面談？登記抽籤？準備方向完全不同。"},
+    {id:"t8", txt:"若考慮資優班，開始了解鑑定內容與時程（數理需要較長準備期）。"},
+    {id:"t9", txt:"<b>這半年不要把孩子的行程排滿</b> —— 看他在空白時間做什麼，那是自主性與興趣最真實的訊號。"}
+  ]},
+  {when:"升小六暑假", sub:"", items:[
+    {id:"t10", txt:"把候選路徑收斂到 2–3 個，並讓孩子真正參與討論 —— 不是形式上問一句。"},
+    {id:"t11", txt:"明確告訴他：<b>「考上不代表一定要去，我們會一起決定。」</b>"}
+  ]},
+  {when:"小六上", sub:"入學前 1 年", items:[
+    {id:"t12", txt:"私中報名陸續開跑（多在 11 月起，各校時程不同，以當年度簡章為準）。"},
+    {id:"t13", txt:"回到第 6 節，確認「退場條件」已經寫下來 —— <b>在放榜前寫，不要在放榜後寫。</b>"}
+  ]},
+  {when:"小六下", sub:"1–3 月", items:[
+    {id:"t14", txt:"甄選與抽籤放榜。<b>決策點。</b>對照第 2 節的觀察結果，而不是對照錄取通知的光環。"}
+  ]},
+  {when:"小六下", sub:"4–6 月", items:[
+    {id:"t15", txt:"若走自學，向縣市教育局遞交計畫書（多數縣市申請期在此區間）。"},
+    {id:"t16", txt:"6 月公立國中分發，9 月入學。"}
+  ]}
+];
+
+/* ============ helpers ============ */
+function esc(s){
+  return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+}
+function lvlColor(n){ return n<=2 ? "var(--ok)" : (n===3 ? "var(--accent)" : "var(--warn)"); }
+function meter(n){
+  var s = '<span class="meter" style="--lvlcolor:'+lvlColor(n)+'" role="img" aria-label="退出成本 '+n+' / 5">';
+  for(var i=1;i<=5;i++) s += '<i class="'+(i<=n?"on":"")+'"></i>';
+  return s + "</span>";
+}
+function listOf(arr){
+  return "<ul>" + arr.map(function(x){ return "<li>"+x+"</li>"; }).join("") + "</ul>";
+}
+
+/* ============ render ============ */
+function render(){
+  var h = [];
+  h.push('<div class="wrap">');
+
+  h.push(
+    '<header class="masthead">',
+      '<p class="kicker">公立　·　私中　·　國際學校　·　實驗教育　·　自學</p>',
+      '<h1>國中升學決策表</h1>',
+      '<p class="standfirst">這張表不會替你選，它做兩件事：<b>把「聽說比較好」拆成可以查證的成分</b>，',
+      '以及<b>把不可逆的決定盡量往後推</b>。勾選與筆記會存在你這台裝置的瀏覽器裡，',
+      '也可以用「複製分享連結」把整份進度傳給另一半。</p>',
+    '</header>'
+  );
+
+  h.push(
+    '<div class="strip">',
+      '<span>路徑　<b id="s-paths">–</b></span>',
+      '<span>觀察題　<b id="s-obs">–</b></span>',
+      '<span>行動　<b id="s-tasks">–</b></span>',
+      '<span class="spacer"></span>',
+      '<span id="s-updated"></span>',
+      '<button class="tool" id="btn-share" type="button">複製分享連結</button>',
+      '<button class="tool" id="btn-theme" type="button">深／淺色</button>',
+      '<button class="tool" id="btn-reset" type="button">清除</button>',
+      '<span class="chip" id="s-chip"><span class="dot"></span><span id="s-chiptxt">–</span></span>',
+    '</div>'
+  );
+
+  /* 01 */
+  h.push('<section><div class="snum">01</div><div class="sbody">');
+  h.push('<h2>先拆解「私中教得比較好」這句話</h2>');
+  h.push('<p class="lede">這句話裡有四個成分，只有一個跟教學品質有關。分清楚它們，接下來的每個決定都會比較準。</p>');
+  h.push('<ul class="verdicts">');
+  VERDICTS.forEach(function(v){
+    h.push('<li><span class="v-name">'+v.name+'</span>',
+           '<span class="v-tag '+v.cls+'">'+v.tag+'</span>',
+           '<p class="v-desc">'+v.desc+'</p></li>');
+  });
+  h.push('</ul>');
+  h.push('<div class="pullquote"><p>而公立的優勢通常被低估：免學費、離家近（每天多睡的那一小時是複利）、常態編班讓孩子看見真實的社會光譜、轉換成本極低。',
+         '而且 108 課綱看的學習歷程與多元表現，公立因為時間彈性反而更容易累積。</p></div>');
+  h.push('</div></section>');
+
+  /* 02 */
+  h.push('<section><div class="snum">02</div><div class="sbody">');
+  h.push('<h2>先看孩子，再看學校</h2>');
+  h.push('<p class="lede">這五題不是測驗，沒有標準答案，也不必今天就填完 —— 可以觀察半年再回來勾。但它們比任何一所學校的升學率都更能預測結果。</p>');
+  h.push('<div class="obs">');
+  DIMS.forEach(function(d,i){
+    var cur = state.observations[d.id] || null;
+    h.push('<div class="ob">',
+      '<div class="ob-q"><span class="ob-id">'+("0"+(i+1))+'</span><span class="ob-title">'+d.t+'</span></div>',
+      '<div class="ob-pair">',
+        '<button class="ob-opt" type="button" data-obs="'+d.id+'" data-v="a" aria-pressed="'+(cur==="a")+'"><strong>'+d.a.h+'</strong><span>'+d.a.s+'</span></button>',
+        '<button class="ob-opt" type="button" data-obs="'+d.id+'" data-v="b" aria-pressed="'+(cur==="b")+'"><strong>'+d.b.h+'</strong><span>'+d.b.s+'</span></button>',
+      '</div>',
+      '<p class="ob-read"><b>這代表什麼：</b>'+d.read+'</p>',
+    '</div>');
+  });
+  h.push('</div></div></section>');
+
+  /* 03 */
+  h.push('<section><div class="snum">03</div><div class="sbody">');
+  h.push('<h2>五條路徑</h2>');
+  h.push('<p class="lede">每張卡片最下面可以標「考慮」或「排除」，並寫一句理由。理由那一欄才是真正有用的部分 —— 半年後回來看，你會慶幸當初寫了。</p>');
+  h.push('<div class="paths">');
+  PATHS.forEach(function(p){
+    var st = (state.paths[p.key] && state.paths[p.key].status) || null;
+    var note = (state.paths[p.key] && state.paths[p.key].note) || "";
+    h.push('<article class="path'+(st==="out"?" is-out":"")+'" id="path-'+p.key+'" style="--stripe:'+lvlColor(p.lvl)+'">');
+    h.push('<div class="path-head"><span class="path-name">'+p.name+'</span><span class="path-tag">'+p.tag+'</span></div>');
+    h.push('<div class="path-fields">');
+    h.push('<div class="f-label">費用</div><div class="f-val">'+p.cost+'</div>');
+    h.push('<div class="f-label">關鍵時程</div><div class="f-val">'+p.when+'</div>');
+    h.push('<div class="f-label">退出成本</div><div class="f-val'+(p.lvl>=4?" warn":"")+'">'+meter(p.lvl)+p.lvl+' / 5<span class="exitnote">'+p.exit+'</span></div>');
+    h.push('<div class="f-label">適合</div><div class="f-val">'+listOf(p.fit)+'</div>');
+    h.push('<div class="f-label">不適合</div><div class="f-val">'+listOf(p.misfit)+'</div>');
+    h.push('<div class="f-label">你該去問</div><div class="f-val">'+listOf(p.ask)+'</div>');
+    h.push('</div>');
+    h.push('<div class="path-foot">',
+      '<span class="seg">',
+        '<button type="button" data-path="'+p.key+'" data-v="in" aria-pressed="'+(st==="in")+'">考慮</button>',
+        '<button type="button" data-path="'+p.key+'" data-v="out" aria-pressed="'+(st==="out")+'">排除</button>',
+      '</span>',
+      '<input class="note" data-note="'+p.key+'" value="'+esc(note)+'" placeholder="為什麼？寫一句，給半年後的自己看" aria-label="'+p.name+' 的註記">',
+    '</div>');
+    h.push('</article>');
+  });
+  h.push('</div></div></section>');
+
+  /* 04 */
+  h.push('<section><div class="snum">04</div><div class="sbody">');
+  h.push('<h2>退出成本階梯</h2>');
+  h.push('<p class="lede">「退出成本」指的是：讀了一兩年之後想換回體制內普通國中，有多難。這是最被低估的判準 —— 因為 12 歲的孩子和 15 歲的孩子，是兩個人。</p>');
+  h.push('<div class="ladder">');
+  LADDER.forEach(function(r){
+    h.push('<div class="rung"><span class="rung-name">'+r.n+'</span>',
+           '<span>'+meter(r.lvl)+'</span>',
+           '<span class="rung-say">'+r.say+'</span></div>');
+  });
+  h.push('</div>');
+  h.push('<div class="pullquote"><p><b>建議原則：小五做不可逆的決定太早。</b>在 12 到 15 歲這段，孩子的興趣、自律、體能與社交型態都會劇烈變化。',
+         '合理的策略是先選可逆性高的路徑，把不可逆的決定延後到高中階段再做 —— 那時孩子能真正參與決策，資訊也更完整。</p>',
+         '<p>唯一的例外是國際路線：如果已經確定孩子出國且財力能撐十年，越早進入英語授課環境語言優勢越大。但它也是最不可逆的，所以必須是「確定」，不能是「試試看」。</p></div>');
+  h.push('</div></section>');
+
+  /* 05 */
+  h.push('<section><div class="snum">05</div><div class="sbody">');
+  h.push('<h2>常被忽略的其他管道</h2>');
+  h.push('<p class="lede">這些管道大多不需要換學校就能走，卻很少出現在家長之間的對話裡。其中好幾條能在公立體系內取得接近私中的密度與同儕。</p>');
+  h.push('<div class="routes">');
+  ROUTES.forEach(function(r){
+    h.push('<div class="route"><h4>'+r.h+'</h4><span class="when">'+r.w+'</span><p>'+r.p+'</p></div>');
+  });
+  h.push('</div></div></section>');
+
+  /* 06 */
+  h.push('<section><div class="snum">06</div><div class="sbody">');
+  h.push('<h2>父母之間先對齊</h2>');
+  h.push('<p class="lede">多數選校的爭執，表面上是在吵學校，實際上是兩個人對「什麼叫好結果」的定義不同。先各自寫，寫完再一起看 —— 不要一邊討論一邊寫。</p>');
+  h.push('<div class="fieldset">',
+    '<div class="field"><label>家長 A ── 我希望他 25 歲時是什麼樣子</label>',
+      '<textarea data-vision="a" placeholder="具體一點。不是「快樂就好」，而是：他在做什麼、跟誰在一起、怎麼面對挫折、經濟上是什麼狀態。">'+esc(state.vision.a)+'</textarea></div>',
+    '<div class="field"><label>家長 B ── 我希望他 25 歲時是什麼樣子</label>',
+      '<textarea data-vision="b" placeholder="先不要看對方寫什麼。寫完再交換。">'+esc(state.vision.b)+'</textarea></div>',
+  '</div>');
+  h.push('<div class="keyfield">',
+    '<h3>退場條件 ── 在放榜之前就寫下來</h3>',
+    '<p class="why">很多家庭考上私中後被沉沒成本綁架：「都考上了不去很可惜。」破解方法只有一個 —— 在還沒有錄取通知、還沒有情緒的時候，先講好什麼條件下我們會選公立。這一欄是整張表最有價值的地方。</p>',
+    '<div class="field"><label>在什麼條件下，我們會選公立國中？</label>',
+    '<textarea data-exitrule="1" placeholder="例：如果通勤超過 40 分鐘／如果他自己明確說不想去／如果晚自習到九點以後／如果學費會讓我們動用到高中的預算／如果他在第 2 節的五題裡有三題落在需要慢火那一側。">'+esc(state.exitRule)+'</textarea></div>',
+  '</div>');
+  h.push('</div></section>');
+
+  /* 07 */
+  h.push('<section><div class="snum">07</div><div class="sbody">');
+  h.push('<h2>時程與行動</h2>');
+  h.push('<p class="lede">以「入學前兩年」為起點往回推。行政時程各縣市與各校不同，實際請以當年度簡章為準 —— 這裡標的是「該在什麼時候開始查」。</p>');
+  h.push('<div class="tl">');
+  PHASES.forEach(function(ph){
+    h.push('<div class="tl-phase"><div class="tl-when">'+ph.when+(ph.sub?'<span>'+ph.sub+'</span>':'')+'</div><div class="tl-items">');
+    ph.items.forEach(function(it){
+      var on = !!state.tasks[it.id];
+      h.push('<div class="task" role="button" tabindex="0" data-task="'+it.id+'" aria-pressed="'+on+'">',
+        '<span class="box"><svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6.2 4.7 9 10 3.3" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>',
+        '<span class="txt">'+it.txt+'</span>',
+      '</div>');
+    });
+    h.push('</div></div>');
+  });
+  h.push('</div></div></section>');
+
+  h.push('<div class="closing">',
+    '<h2>如果一定要給一個預設值</h2>',
+    '<p class="default">公立學區國中　＋　主動補強（資優班鑑定，或選定 1–2 個領域深度發展）　＋　把私中的學費存下來，留給高中與大學階段。</p>',
+    '<p>對多數家庭，這是風險最低、可逆性最高、結果分布最穩定的選擇。要偏離這個預設值，應該要有明確理由 —— 孩子特質確實需要、家庭已確定海外路線、或學區學校有你親自查證過的具體問題 —— 而不是因為「聽說比較好」。</p>',
+    '<p>還有一件事比選學校更能決定結果：孩子的自律、閱讀習慣，以及他跟你們的關係。如果家裡每晚是戰場，換學校不會解決它。</p>',
+  '</div>');
+
+  h.push('<p class="foot">本表整理自公開的升學制度資訊，招生方式、費用與申請時程各縣市與各校差異大且逐年調整，決策前請以當年度官方簡章與學校說明為準。',
+         '勾選內容只存在你自己的瀏覽器，不會上傳到任何伺服器。國中三年是孩子在過，不是你們在過 —— 最後階段請讓他真的有發言權。</p>');
+
+  h.push('</div>');
+  document.getElementById("root").innerHTML = h.join("");
+  updateStrip();
+}
+
+/* ============ summary strip ============ */
+function updateStrip(){
+  var inC=0, outC=0;
+  PATHS.forEach(function(p){
+    var s = state.paths[p.key] && state.paths[p.key].status;
+    if(s==="in") inC++; else if(s==="out") outC++;
+  });
+  var obsC = DIMS.filter(function(d){ return state.observations[d.id]; }).length;
+  var total=0, done=0;
+  PHASES.forEach(function(ph){ ph.items.forEach(function(it){ total++; if(state.tasks[it.id]) done++; }); });
+
+  set("s-paths", inC+" 考慮 · "+outC+" 排除 · "+(PATHS.length-inC-outC)+" 未定");
+  set("s-obs", obsC+" / "+DIMS.length);
+  set("s-tasks", done+" / "+total);
+  var el = document.getElementById("s-updated");
+  if(el) el.textContent = state.updatedAt ? ("最後更新 "+fmt(state.updatedAt)) : "";
+}
+function set(id,txt){ var el=document.getElementById(id); if(el) el.textContent=txt; }
+function fmt(iso){
+  try{
+    var d = new Date(iso);
+    return d.getFullYear()+"/"+(d.getMonth()+1)+"/"+d.getDate()+" "+
+      String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");
+  }catch(e){ return ""; }
+}
+function chip(cls,txt){
+  var c=document.getElementById("s-chip"), t=document.getElementById("s-chiptxt");
+  if(!c||!t) return;
+  c.className = "chip"+(cls?" "+cls:"");
+  t.textContent = txt;
+}
+var toastTimer=null;
+function toast(msg){
+  var el = document.getElementById("toast");
+  if(!el){ el=document.createElement("div"); el.id="toast"; el.className="toast"; document.body.appendChild(el); }
+  el.textContent = msg; el.hidden = false;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ el.hidden = true; }, 2600);
+}
+
+/* ============ interaction ============ */
+function toggleTask(el){
+  var id = el.getAttribute("data-task");
+  var on = el.getAttribute("aria-pressed") === "true";
+  el.setAttribute("aria-pressed", String(!on));
+  if(on) delete state.tasks[id]; else state.tasks[id] = true;
+  save();
+}
+
+document.addEventListener("click", function(e){
+  var t;
+
+  if((t = e.target.closest("#btn-share"))){
+    var url = location.origin + location.pathname + "#s=" + b64enc(JSON.stringify(state));
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(
+        function(){ toast("連結已複製 —— 傳給另一半，打開就會看到你的進度"); },
+        function(){ window.prompt("複製這個連結：", url); }
+      );
+    } else { window.prompt("複製這個連結：", url); }
+    return;
+  }
+
+  if((t = e.target.closest("#btn-theme"))){
+    var root = document.documentElement;
+    var cur = root.getAttribute("data-theme");
+    var sysDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var next = cur ? (cur === "dark" ? "light" : "dark") : (sysDark ? "light" : "dark");
+    root.setAttribute("data-theme", next);
+    try{ localStorage.setItem(STORE_KEY+":theme", next); }catch(err){}
+    return;
+  }
+
+  if((t = e.target.closest("#btn-reset"))){
+    if(window.confirm("清除這台裝置上的所有勾選與筆記？這個動作無法復原。")){
+      state = normalize({});
+      try{ localStorage.removeItem(STORE_KEY); }catch(err){}
+      render(); chip("", "已清除"); toast("已清除");
+    }
+    return;
+  }
+
+  if((t = e.target.closest("[data-obs]"))){
+    var d = t.getAttribute("data-obs"), v = t.getAttribute("data-v");
+    state.observations[d] = (state.observations[d] === v) ? null : v;
+    if(!state.observations[d]) delete state.observations[d];
+    document.querySelectorAll('[data-obs="'+d+'"]').forEach(function(b){
+      b.setAttribute("aria-pressed", String(state.observations[d] === b.getAttribute("data-v")));
+    });
+    save();
+    return;
+  }
+
+  if((t = e.target.closest("[data-path]"))){
+    var k = t.getAttribute("data-path"), pv = t.getAttribute("data-v");
+    var rec = state.paths[k] || (state.paths[k] = {status:null, note:""});
+    rec.status = (rec.status === pv) ? null : pv;
+    document.querySelectorAll('[data-path="'+k+'"]').forEach(function(b){
+      b.setAttribute("aria-pressed", String(rec.status === b.getAttribute("data-v")));
+    });
+    var card = document.getElementById("path-"+k);
+    if(card) card.classList.toggle("is-out", rec.status === "out");
+    save();
+    return;
+  }
+
+  if((t = e.target.closest(".task"))) toggleTask(t);
+}, false);
+
+document.addEventListener("keydown", function(e){
+  if(e.key !== "Enter" && e.key !== " ") return;
+  var t = e.target.closest && e.target.closest(".task");
+  if(t){ e.preventDefault(); toggleTask(t); }
+}, false);
+
+document.addEventListener("input", function(e){
+  var el = e.target;
+  if(el.matches && el.matches("[data-note]")){
+    var k = el.getAttribute("data-note");
+    var rec = state.paths[k] || (state.paths[k] = {status:null, note:""});
+    rec.note = el.value; save();
+  } else if(el.matches && el.matches("[data-vision]")){
+    state.vision[el.getAttribute("data-vision")] = el.value; save();
+  } else if(el.matches && el.matches("[data-exitrule]")){
+    state.exitRule = el.value; save();
+  }
+}, false);
+
+/* ============ boot ============ */
+try{
+  var savedTheme = localStorage.getItem(STORE_KEY+":theme");
+  if(savedTheme === "dark" || savedTheme === "light") document.documentElement.setAttribute("data-theme", savedTheme);
+}catch(e){}
+
+loadState();
+render();
+
+if(loadedFrom === "link")      { chip("live", "已從分享連結載入"); toast("已載入分享連結裡的進度"); }
+else if(loadedFrom === "local"){ chip("live", "已存到這台裝置"); }
+else if(loadedFrom === "nostore"){ chip("ro", "此瀏覽器無法儲存"); }
+else                           { chip("", "勾選會自動儲存"); }
+})();
+</script>
+</body>
+</html>
