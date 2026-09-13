@@ -74,6 +74,12 @@ h1{
 }
 .standfirst{max-width:62ch; color:var(--ink-2); font-size:16.5px; margin:0}
 .standfirst b{color:var(--ink); font-weight:500}
+.hero{margin:28px 0 0}
+.hero img{
+  display:block; width:100%; max-width:100%; height:auto;
+  border:1px solid var(--rule-soft); border-radius:3px;
+  background:var(--surface-2);
+}
 
 /* ---------- status strip ---------- */
 .strip{
@@ -577,6 +583,13 @@ function render(){
       '<p class="standfirst">這張表不會替你選，它做兩件事：<b>把「聽說比較好」拆成可以查證的成分</b>，',
       '以及<b>把不可逆的決定盡量往後推</b>。勾選與筆記會存在你這台裝置的瀏覽器裡，',
       '也可以用「複製分享連結」把整份進度傳給另一半。</p>',
+      '<figure class="hero">',
+        '<picture>',
+          '<source srcset="hero.webp" type="image/webp">',
+          '<img src="hero.jpg" width="1704" height="567" fetchpriority="high" decoding="async"',
+          ' alt="住宅區街道的 Y 字路口，兩條窄路從同一個轉角分岔，各自沒入遠處">',
+        '</picture>',
+      '</figure>',
     '</header>'
   );
 
@@ -727,6 +740,11 @@ function render(){
 
   h.push('<p class="foot">本表整理自公開的升學制度資訊，招生方式、費用與申請時程各縣市與各校差異大且逐年調整，決策前請以當年度官方簡章與學校說明為準。',
          '勾選內容只存在你自己的瀏覽器，不會上傳到任何伺服器。國中三年是孩子在過，不是你們在過 —— 最後階段請讓他真的有發言權。</p>');
+
+  h.push('<p class="foot">頁首照片：i_yudai，',
+         '<a href="https://commons.wikimedia.org/wiki/File:The_fork_in_the_road_(2330044065).jpg">《The fork in the road》</a>，',
+         '來源 Wikimedia Commons，授權 ',
+         '<a href="https://creativecommons.org/licenses/by/2.0/deed.zh-hant">CC BY 2.0</a>，本站裁切使用。</p>');
 
   h.push('</div>');
   document.getElementById("root").innerHTML = h.join("");
