@@ -85,6 +85,8 @@ h1{
 .standfirst{max-width:62ch; color:var(--ink-2); font-size:16.5px; margin:0}
 .standfirst b{color:var(--ink); font-weight:500}
 .hero{margin:28px 0 0}
+.closing-img{margin:52px 0 0}
+.closing-img + .closing{margin-top:18px}
 .hero img{
   display:block; width:100%; max-width:100%; height:auto;
   border:1px solid var(--rule-soft); border-radius:3px;
@@ -850,6 +852,11 @@ function render(){
   });
   h.push('</div></div></section>');
 
+  h.push('<figure class="hero closing-img">',
+    '<img src="curve.jpg" width="1600" height="458" loading="lazy" decoding="async"',
+    ' alt="空曠的柏油路彎道，路旁三面指向轉彎的箭頭標誌依序沒入遠處">',
+  '</figure>');
+
   h.push('<div class="closing">',
     '<h2>如果一定要給一個預設值</h2>',
     '<p class="default">公立學區國中　＋　主動補強（資優班鑑定，或選定 1–2 個領域深度發展）　＋　把私中的學費存下來，留給高中與大學階段。</p>',
@@ -863,7 +870,11 @@ function render(){
   h.push('<p class="foot">頁首照片：i_yudai，',
          '<a href="https://commons.wikimedia.org/wiki/File:The_fork_in_the_road_(2330044065).jpg">《The fork in the road》</a>，',
          '來源 Wikimedia Commons，授權 ',
-         '<a href="https://creativecommons.org/licenses/by/2.0/deed.zh-hant">CC BY 2.0</a>，本站裁切使用。</p>');
+         '<a href="https://creativecommons.org/licenses/by/2.0/deed.zh-hant">CC BY 2.0</a>，本站裁切使用。',
+         '結語照片：玄史生，',
+         '<a href="https://commons.wikimedia.org/wiki/File:Dongxin_Street_Curve,_Nangang_20121215.jpg">《Dongxin Street Curve, Nangang》</a>，',
+         '來源 Wikimedia Commons，授權 ',
+         '<a href="https://creativecommons.org/publicdomain/zero/1.0/deed.zh-hant">CC0</a>（免標示，此處為禮貌註記）。</p>');
 
   h.push('</div>');
   document.getElementById("root").innerHTML = h.join("");
