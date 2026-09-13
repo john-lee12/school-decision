@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>找不到這一頁</title>
+<meta name="robots" content="noindex">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400&family=Noto+Sans+TC:wght@400;500&family=Noto+Serif+TC:wght@700&display=swap">
+<style>
+:root{ --paper:#F1F2F6; --ink:#191C28; --ink-2:#454B60; --muted:#6E7489; --accent:#2F4A96; --rule:#D3D7E2 }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --paper:#12141C; --ink:#E7E9F1; --ink-2:#B6BBCC; --muted:#8A90A5; --accent:#93A9EC; --rule:#333849 }
+}
+:root[data-theme="dark"]{ --paper:#12141C; --ink:#E7E9F1; --ink-2:#B6BBCC; --muted:#8A90A5; --accent:#93A9EC; --rule:#333849 }
+*{box-sizing:border-box}
+body{
+  margin:0; min-height:100vh; background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.75; display:grid; place-items:center; padding:32px;
+}
+main{max-width:34rem}
+.code{font-family:"IBM Plex Mono",ui-monospace,monospace; font-size:12px; letter-spacing:.16em; color:var(--accent); margin:0 0 14px}
+h1{font-family:"Noto Serif TC",Georgia,serif; font-size:clamp(26px,5vw,36px); line-height:1.3; margin:0 0 14px}
+p{color:var(--ink-2); margin:0 0 24px}
+a.home{
+  display:inline-block; font-weight:500; color:var(--accent); text-decoration:none;
+  border:1px solid var(--rule); border-radius:4px; padding:9px 18px;
+}
+a.home:hover{border-color:var(--accent)}
+a.home:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.note{margin-top:26px; font-size:12.5px; color:var(--muted)}
+</style>
+</head>
+<body>
+<main>
+  <p class="code">404</p>
+  <h1>找不到這一頁</h1>
+  <p>這個網站只有一頁 —— 國中升學決策表。網址可能打錯了，或是舊連結。</p>
+  <a class="home" href="/">回到決策表</a>
+  <p class="note">如果你是從分享連結過來的，請跟對方要一次完整的網址（分享連結會在結尾帶一段 <code>#s=</code> 開頭的進度碼）。</p>
+</main>
+</body>
+</html>
