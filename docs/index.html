@@ -241,6 +241,19 @@ p{margin:0 0 14px}
 }
 .note::placeholder{color:var(--muted)}
 
+/* ---------- diagrams ---------- */
+.dia{margin:0 0 30px}
+.dia svg{display:block; width:100%; max-width:100%; height:auto}
+.dia .lane-label{font-size:13px; font-weight:700; fill:var(--ink)}
+.dia .tick{font-size:10.5px; fill:var(--muted); letter-spacing:.06em}
+.dia .note{font-size:11px; fill:var(--muted)}
+.dia .dest{font-size:11.5px; fill:var(--ink-2)}
+.dia .boxlabel{font-size:12px; font-weight:700; fill:var(--ink)}
+.dia figcaption{
+  margin-top:10px; font-size:12.5px; color:var(--muted); line-height:1.65;
+  padding-top:9px; border-top:1px solid var(--rule-soft);
+}
+
 /* ---------- ladder ---------- */
 .ladder{border-top:1px solid var(--rule); margin-top:4px}
 .rung{
@@ -523,6 +536,96 @@ var ROUTES = [
   {h:"同等學力報考", w:"不必然要讀完高中", p:"自學生可用同等學力資格報考大學。這條路的存在意味著：即使離開體制，升學的門仍然開著 —— 但要主動累積可被檢視的成果。"}
 ];
 
+var DIA_DEFS =
+  '<defs>' +
+    '<marker id="dia-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+      '<path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>' +
+    '<marker id="dia-al" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">' +
+      '<path d="M0,0 L10,5 L0,10 z" fill="currentColor"/></marker>' +
+    '<marker id="dia-aw" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">' +
+      '<path d="M0,0 L10,5 L0,10 z" fill="var(--warn)"/></marker>' +
+  '</defs>';
+
+/* §04：五條路徑各自「有沒有回到體制內的那條邊」 */
+var LANES = [
+  {y:88,  name:"公立國中",  back:"隨時可回，本來就在主線上"},
+  {y:146, name:"私立中學",  back:"可回，成本在心理不在制度"},
+  {y:204, name:"自學",      back:"每學年可回，需自行補進度", dash:"5 4"},
+  {y:262, name:"實驗教育",  back:"很難回，國三才轉來不及",   dash:"2 5"},
+  {y:320, name:"國際學校",  gate:true}
+];
+var DESTS = ["會考 → 高中","會考／直升","會考（可報考）","會考","海外申請"];
+
+function diaExit(){
+  var s = '<svg viewBox="0 0 860 368" role="img" aria-label="五條路徑的時間軸。公立、私中、自學、實驗教育都有一條指回體制內的返回邊，返回難度由實線遞減為點線；國際學校那一條沒有返回邊，取而代之的是一道單向閘門。">';
+  s += DIA_DEFS;
+  /* 時間刻度 */
+  s += '<line x1="100" y1="58" x2="100" y2="344" stroke="currentColor" stroke-opacity=".18"/>';
+  s += '<line x1="400" y1="58" x2="400" y2="344" stroke="currentColor" stroke-opacity=".18"/>';
+  s += '<text class="tick" x="100" y="46">12 歲　入學</text>';
+  s += '<text class="tick" x="400" y="46">15 歲　高中</text>';
+  s += '<text class="tick" x="640" y="46" text-anchor="end">18 歲</text>';
+
+  LANES.forEach(function(L,i){
+    var col = L.gate ? 'var(--warn)' : 'currentColor';
+    var op  = L.gate ? '1' : '.55';
+    s += '<text class="lane-label" x="86" y="'+(L.y+5)+'" text-anchor="end">'+L.name+'</text>';
+    s += '<line x1="100" y1="'+L.y+'" x2="634" y2="'+L.y+'" stroke="'+col+'" stroke-opacity="'+op+'" stroke-width="2" marker-end="url(#'+(L.gate?'dia-aw':'dia-ar')+')"/>';
+    s += '<text class="dest" x="660" y="'+(L.y+4)+'">'+DESTS[i]+'</text>';
+
+    if(L.gate){
+      s += '<line x1="250" y1="'+(L.y-16)+'" x2="250" y2="'+(L.y+16)+'" stroke="var(--warn)" stroke-width="4"/>';
+      s += '<text class="note" x="264" y="'+(L.y-20)+'" fill="var(--warn)">單向閘門　沒有返回邊</text>';
+    } else {
+      s += '<path d="M302,'+(L.y-20)+' Q250,'+(L.y-36)+' 198,'+(L.y-20)+'" fill="none" stroke="currentColor"'
+         + ' stroke-opacity=".55" stroke-width="1.5"'+(L.dash?' stroke-dasharray="'+L.dash+'"':'')+' marker-end="url(#dia-al)"/>';
+      s += '<text class="note" x="314" y="'+(L.y-17)+'">'+L.back+'</text>';
+    }
+  });
+  return s + '</svg>';
+}
+
+/* §05：各管道在哪個時間點離開國中主線、落在哪裡 */
+function diaRoutes(){
+  var s = '<svg viewBox="0 0 860 392" role="img" aria-label="國中三年的主線圖。資優班與雙語班是一條虛線支線，從國一離開又在國三回到主線；完全中學直升是一條繞過會考、直接進高中的弧線；五專從國三下離開主線，跳過高中；技藝教育專案從國二向下通往高職。">';
+  s += DIA_DEFS;
+
+  /* 主線 */
+  s += '<line x1="130" y1="205" x2="494" y2="205" stroke="currentColor" stroke-width="2.5" marker-end="url(#dia-ar)"/>';
+  [[170,"國一"],[290,"國二"],[410,"國三"]].forEach(function(t){
+    s += '<circle cx="'+t[0]+'" cy="205" r="4" fill="currentColor"/>';
+    s += '<text class="tick" x="'+t[0]+'" y="226" text-anchor="middle">'+t[1]+'</text>';
+  });
+
+  /* 會考與高中 */
+  s += '<rect x="506" y="189" width="74" height="32" rx="3" fill="none" stroke="currentColor" stroke-opacity=".5"/>';
+  s += '<text class="boxlabel" x="543" y="210" text-anchor="middle">會考</text>';
+  s += '<line x1="580" y1="205" x2="640" y2="205" stroke="currentColor" stroke-width="2" marker-end="url(#dia-ar)"/>';
+  [[189,"高中"],[272,"五專（五年）"],[340,"高職"]].forEach(function(b){
+    s += '<rect x="652" y="'+b[0]+'" width="150" height="32" rx="3" fill="var(--surface-2)" stroke="currentColor" stroke-opacity=".35"/>';
+    s += '<text class="boxlabel" x="727" y="'+(b[0]+21)+'" text-anchor="middle">'+b[1]+'</text>';
+  });
+  s += '<text class="note" x="727" y="322" text-anchor="middle">→ 就業或插大</text>';
+
+  /* 支線一：資優班／雙語班 —— 離開又回到主線 */
+  s += '<path d="M170,205 L170,130 L410,130 L410,205" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="1.5" stroke-dasharray="5 4"/>';
+  s += '<text class="note" x="290" y="120" text-anchor="middle">資優班／雙語班／藝才班　　鑑定後仍留在原校，不離開主線</text>';
+
+  /* 支線二：直升 —— 繞過會考 */
+  s += '<path d="M410,205 Q530,152 646,197" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width="1.8" marker-end="url(#dia-ar)"/>';
+  s += '<text class="note" x="530" y="146" text-anchor="middle">完全中學直升　免會考</text>';
+
+  /* 支線三：五專 —— 跳過高中 */
+  s += '<path d="M410,205 L642,286" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width="1.8" marker-end="url(#dia-ar)"/>';
+  s += '<text class="note" x="432" y="258">五專優先免試　國三下</text>';
+
+  /* 支線四：技職 */
+  s += '<path d="M290,205 L290,356 L642,356" fill="none" stroke="currentColor" stroke-opacity=".7" stroke-width="1.8" marker-end="url(#dia-ar)"/>';
+  s += '<text class="note" x="302" y="348">技藝教育專案　國二可先試探性向</text>';
+
+  return s + '</svg>';
+}
+
 var PHASES = [
   {when:"小五上", sub:"入學前 2 年", items:[
     {id:"t1", txt:"<b>父母各自寫下「希望孩子 25 歲時是什麼樣子」，再對照。</b>多數選校衝突其實是目標衝突，先解決這個，後面的討論才有共同基準。"},
@@ -673,6 +776,9 @@ function render(){
   h.push('<section><div class="snum">04</div><div class="sbody">');
   h.push('<h2>退出成本階梯</h2>');
   h.push('<p class="lede">「退出成本」指的是：讀了一兩年之後想換回體制內普通國中，有多難。這是最被低估的判準 —— 因為 12 歲的孩子和 15 歲的孩子，是兩個人。</p>');
+  h.push('<figure class="dia">', diaExit(),
+    '<figcaption>四條路徑都有一條指回體制內的返回邊，差別只在難度（實線 → 虛線 → 點線）。國際課程那一條沒有返回邊 —— 它不是比較貴的選擇，是結構不同的選擇。</figcaption>',
+  '</figure>');
   h.push('<div class="ladder">');
   LADDER.forEach(function(r){
     h.push('<div class="rung"><span class="rung-name">'+r.n+'</span>',
@@ -689,6 +795,9 @@ function render(){
   h.push('<section><div class="snum">05</div><div class="sbody">');
   h.push('<h2>常被忽略的其他管道</h2>');
   h.push('<p class="lede">這些管道大多不需要換學校就能走，卻很少出現在家長之間的對話裡。其中好幾條能在公立體系內取得接近私中的密度與同儕。</p>');
+  h.push('<figure class="dia">', diaRoutes(),
+    '<figcaption>差別在於「什麼時候離開主線、離開多遠」：資優班離開又回來，直升繞過會考，五專整段跳過高中，技職從國二就能先試探。下面七張卡是完整清單。</figcaption>',
+  '</figure>');
   h.push('<div class="routes">');
   ROUTES.forEach(function(r){
     h.push('<div class="route"><h4>'+r.h+'</h4><span class="when">'+r.w+'</span><p>'+r.p+'</p></div>');
